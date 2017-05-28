@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
             myIntent = new Intent(MainActivity.this, CardListActivity.class);
             MainActivity.this.startActivity(myIntent);
+        } else if (id == R.id.nav_join) {
+            myIntent = new Intent(MainActivity.this, JoinActivity.class);
+            MainActivity.this.startActivity(myIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

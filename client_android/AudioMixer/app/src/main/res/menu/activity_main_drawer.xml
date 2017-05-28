@@ -18,6 +18,10 @@
             android:id="@+id/music_player"
             android:icon="@drawable/ic_menu_manage"
             android:title="Music Player" />
+        <item
+            android:id="@+id/nav_join"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Join" />
     </group>
 
     <item android:title="Communicate">

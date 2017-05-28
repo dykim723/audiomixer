@@ -38,7 +38,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".StreamingActivity" />
         <activity android:name=".RecordActivity" />
-        <activity android:name=".CardListActivity"></activity>
+        <activity android:name=".CardListActivity" />
+        <activity
+            android:name=".JoinActivity"
+            android:label="@string/title_activity_join"></activity>
     </application>
 
 </manifest>
