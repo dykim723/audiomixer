@@ -54,7 +54,7 @@ app.use(function(req, res, next) {
 app.use('/', index);
 app.use('/users', users);
 app.use('/login', login);
-app.use('/postingUpload', posting);
+app.use('/posting', posting);
 app.use('/mix', mix);
 app.use('/mix/', mix);
 

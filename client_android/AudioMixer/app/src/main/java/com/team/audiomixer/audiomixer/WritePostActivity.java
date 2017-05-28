@@ -20,6 +20,8 @@ import android.provider.MediaStore;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -51,8 +53,8 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
     final int REQ_CODE_IMAGE = 100;
     final int REQ_CODE_AUDIO = 200;
     final int REQ_CODE_VIDEO = 300;
-    final int POST_FAIL = 1;
-    final int POST_SUCCESS = 2;
+    final int POST_FAIL = 101;
+    final int POST_SUCCESS = 201;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -110,16 +112,17 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
         Log.d("WritePost", "delete Button listener in activity");
         mListFileKey.remove(position);
         mListFileVal.remove(position);
+        mListInstrumentKey.remove(position);
     }
 
     @Override
     public void onClickListenerMediaListViewSelectBtn(int position) {
-        final String[] items = {"기타", "드럼", "피아노", "보컬", "MIX", "사진/비디오"};
+        final String[] items = {"기타", "드럼", "피아노", "보컬", "MIX"};
         final int pos = position;
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         // 제목셋팅
-        alertDialogBuilder.setTitle("악기 선택");
+        alertDialogBuilder.setTitle("악기선택");
         alertDialogBuilder.setSingleChoiceItems(items, -1,
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int id) {
@@ -203,9 +206,9 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
             Log.d("WritePost", "Add image clicked");
 
             Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
-            intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, REQ_CODE_IMAGE);
+            intent.setType(android.provider.MediaStore.Video.Media.CONTENT_TYPE);
+            intent.setData(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQ_CODE_VIDEO);
         }
     };
 
@@ -246,7 +249,7 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
                     mListStringKey.add("Email");
                     mListStringVal.add("TestEmail@gmail.com");
 
-                    excuteFilePost("http://192.168.11.105:5000/");
+                    excuteFilePost("http://192.168.200.64:5000/posting");
                 }
             }.start();
         }
@@ -275,15 +278,13 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
                 default:
                     break;
             }
-
-
         }
     };
-
 
     public void excuteFilePost(String serverURL)
     {
         Message handlerMsg = mHandler.obtainMessage();
+        int boardNo = 0;
 
         try {
             URL url = new URL(serverURL);
@@ -307,6 +308,7 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
 
             // Post File
             // filename: 서버에 저장할 파일명
+            Log.d("WritePost", "File Count: " + mListFileKey.size());
             for(int i = 0; i < mListFileKey.size(); i++)
             {
                 wr.writeBytes("\r\n--" + boundary + "\r\n");
@@ -344,17 +346,29 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
             // server return
             BufferedReader rd = null;
             rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-            String line = null;
+            String line = "";
+            String strJson = "";
 
             while ((line = rd.readLine()) != null)
             {
                 Log.d("WritePost", "server response: " + line);
-                handlerMsg.arg1 = Integer.parseInt(line);
+                strJson += line;
+            }
+
+            try
+            {
+                JSONObject jsonObject = new JSONObject(strJson);
+                boardNo = jsonObject.getInt("BoardNo");
+            }
+            catch (Exception e)
+            {
+                Log.d("WritePost", "server response json parsing fail " + strJson);
             }
 
             rd.close();
 
             handlerMsg.what = POST_SUCCESS;
+            handlerMsg.arg1 = boardNo;
             mHandler.sendMessage(handlerMsg);
 
             Log.d("WritePost", "end post");

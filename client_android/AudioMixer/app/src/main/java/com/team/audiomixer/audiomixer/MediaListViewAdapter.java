@@ -84,7 +84,7 @@ public class MediaListViewAdapter  extends BaseAdapter {
 
         // 아이템 내 각 위젯에 데이터 반영
         titleTextView.setText(listViewItem.getTitle());
-        mMediaListViewItems.get(pos).setSelectBtn(selectButton);
+        listViewItem.setSelectBtn(selectButton);
 
         return convertView;
     }
