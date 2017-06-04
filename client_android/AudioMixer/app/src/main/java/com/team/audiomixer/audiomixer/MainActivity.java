@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
             myIntent = new Intent(MainActivity.this, RecordActivity.class);
             MainActivity.this.startActivity(myIntent);
         } else if (id == R.id.nav_send) {
-            myIntent = new Intent(MainActivity.this, CardListActivity.class);
+            myIntent = new Intent(MainActivity.this, MediaBoardActivity.class);
             MainActivity.this.startActivity(myIntent);
         } else if (id == R.id.nav_join) {
             myIntent = new Intent(MainActivity.this, JoinActivity.class);
