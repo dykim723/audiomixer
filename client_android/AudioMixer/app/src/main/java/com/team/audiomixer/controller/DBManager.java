@@ -1,8 +1,11 @@
 package com.team.audiomixer.controller;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,18 +13,42 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static java.lang.Boolean.TRUE;
+
 /**
  * Created by dykim on 2017-05-28.
  */
 
 public class DBManager {
 
-    public static Boolean excutePost(JSONObject jsonParam)
-    {
+    public enum ServerAccessKey {
+        USERS("users"), LOGIN("login"), JOIN("join"), POSTING("posting"), MIX("mix");
+
+        final private String value;
+
+        private ServerAccessKey(String value) {
+            this.value = value;
+        }
+
+        public String getServerAccessKey(){
+            return this.value;
+        }
+    };
+
+    private static String makeDBURL(ServerAccessKey to) {
+        String temp = Configuration.DBURL;
+
+        return temp.concat(to.getServerAccessKey());
+    }
+
+    public static Boolean excutePost(ServerAccessKey key, JSONObject jsonParam) {
         URL url;
         HttpURLConnection connection = null;
+        ByteArrayOutputStream baos = null;
+
+
         try {
-            url = new URL(Configuration.DBURL);
+            url = new URL(makeDBURL(key));
 
             connection = (HttpURLConnection)url.openConnection();
             connection.setDoOutput(true);
@@ -41,7 +68,32 @@ public class DBManager {
             int response = connection.getResponseCode();
             if (response >= 200 && response <=399){
                 //return is = connection.getInputStream();
-                return true;
+                is = connection.getInputStream();
+                baos = new ByteArrayOutputStream();
+                byte[] byteBuffer = new byte[1024];
+                byte[] byteData = null;
+                int nLength = 0;
+                while((nLength = is.read(byteBuffer, 0, byteBuffer.length)) != -1) {
+                    baos.write(byteBuffer, 0, nLength);
+                }
+                byteData = baos.toByteArray();
+
+                String res = new String(byteData);
+
+
+                JSONObject responseJSON = new JSONObject(res);
+
+                Boolean result = (Boolean) responseJSON.get("status");
+                String description = (String) responseJSON.get("description");
+
+                Log.i("DBManager", "DATA response = " + res);
+
+                if(result) {
+                    return true;
+                } else{
+                    return false;
+                }
+
             } else {
                 //return is = connection.getErrorStream();
                 return false;

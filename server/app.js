@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login');
+var join = require('./routes/join');
 var posting = require('./routes/posting');
 var mix = require('./routes/mix');
 var fs = require('fs');
@@ -54,6 +55,7 @@ app.use(function(req, res, next) {
 app.use('/', index);
 app.use('/users', users);
 app.use('/login', login);
+app.use('/join', join);
 app.use('/posting', posting);
 app.use('/mix', mix);
 app.use('/mix/', mix);
@@ -78,7 +80,7 @@ app.use(function(req, res, next) {
 // error handler
 
 
-app.listen(5000, function () {
+app.listen(5001, function () {
   console.log('Example app listening on port 5000!');
 });
 module.exports = app;

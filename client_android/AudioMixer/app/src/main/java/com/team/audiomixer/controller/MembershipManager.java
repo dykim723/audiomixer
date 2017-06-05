@@ -4,6 +4,10 @@ import android.util.Log;
 
 import com.team.audiomixer.model.User;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.team.audiomixer.controller.DBManager.ServerAccessKey.JOIN;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -16,14 +20,21 @@ public class MembershipManager {
     private String tag = "MembershipManager";
 
     public boolean createUser(String email, String password, String nickname) {
-
+        JSONObject json = new JSONObject();
         User user = new User(email, password, nickname);
 
         Log.d(tag, email + " " + password + " " + nickname);
         // TODO: Insert Data into DB
 
+        try {
+            json.put("email", email);
+            json.put("password", password);
+            json.put("nickname", nickname);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return TRUE;
+        return DBManager.excutePost(JOIN, json);
     }
 
     public boolean modifyUser(){

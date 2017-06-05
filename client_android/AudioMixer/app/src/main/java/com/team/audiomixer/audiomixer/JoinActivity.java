@@ -331,43 +331,17 @@ public class JoinActivity extends AppCompatActivity implements LoaderCallbacks<C
         private final String mNickname;
 
         UserJoinTask(String email, String password, String nickname) {
-
             mEmail = email;
             mPassword = password;
             mNickname = nickname;
-
-            membershipManager.createUser(mEmail, mPassword, mNickname);
-
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
-           /* try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }*/
-
-            JSONObject json = new JSONObject();
-            try {
-                json.put("email", "Object");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            DBManager.excutePost(json);
             // TODO: register the new account here.
-            return true;
+            return membershipManager.createUser(mEmail, mPassword, mNickname);
+
         }
 
         @Override
@@ -378,8 +352,8 @@ public class JoinActivity extends AppCompatActivity implements LoaderCallbacks<C
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                mEmailView.setError("This email is already taken");
+                mEmailView.requestFocus();
             }
         }
 
