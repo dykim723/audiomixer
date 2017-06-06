@@ -7,17 +7,22 @@ import java.util.Queue;
  */
 
 public class Board {
+    private int BoardNo;
     private Queue<FileInfo> files;
     private Queue<FileInfo> images;
     private String text;
     private Queue<Tag> tags;
     private int likeCount;
-    private String mTitle;
-    private String mContent;
-    private String mDate;
-    private String mUserEmail;
-    private String mFilePath;
-    private int mBoardNo;
+    private String Title;
+    private String Content;
+    private String Date;
+    private String UserInfo_Email;
+    private String FilePath;
+
+
+    public Board(int boardNo){
+        this.BoardNo = boardNo;
+    }
 
     public Board(String text) {
         this.text = text;
@@ -58,16 +63,16 @@ public class Board {
         return ++this.likeCount;
     }
 
-    public String getTitle() { return mTitle; }
-    public String getContent() { return  mContent; }
-    public String getDate() { return mDate; }
-    public String getUserEmail() { return mUserEmail; }
-    public String getFilePath() { return mFilePath; }
-    public int getBoardNo() { return mBoardNo; }
-    public void setTitle(String str) { mTitle = str; }
-    public void setContent(String str) { mContent = str; }
-    public void setDate(String str) { mDate = str; }
-    public void setUserEmail(String str) { mUserEmail = str; }
-    public void setFilePath(String str) { mFilePath = str; }
-    public void setBoardNo(int number) { mBoardNo = number; }
+    public String getTitle() { return Title; }
+    public String getContent() { return Content; }
+    public String getDate() { return Date; }
+    public String getUserEmail() { return UserInfo_Email; }
+    public String getFilePath() { return FilePath; }
+    public int getBoardNo() { return BoardNo; }
+    public void setTitle(String str) { Title = str; }
+    public void setContent(String str) { Content = str; }
+    public void setDate(String str) { Date = str; }
+    public void setUserEmail(String str) { UserInfo_Email = str; }
+    public void setFilePath(String str) { FilePath = str; }
+    public void setBoardNo(int number) { BoardNo = number; }
 }

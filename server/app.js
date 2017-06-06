@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var users = require('./routes/user');
 var login = require('./routes/login');
 var join = require('./routes/join');
 var posting = require('./routes/posting');
@@ -15,18 +15,13 @@ var mix = require('./routes/mix');
 var board = require('./routes/board');
 var fs = require('fs');
 var http = require('http');
-/*
- var upload = multer({ //multer settings
- storage: storage
- }).single('file');
- */
-
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -63,13 +58,6 @@ app.use('/mix/', mix);
 app.use('/board', board);
 
 app.use('/static', express.static('public'));
-
-app.get('/test', function(req, res){
-  fs.readFile('public/combined.mp3', function(error, data){
-    res.writeHead(200, { 'Content-Type': 'audio/mp3'});
-    res.end(data);
-  });
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

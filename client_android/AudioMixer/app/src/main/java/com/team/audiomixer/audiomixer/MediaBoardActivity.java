@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.team.audiomixer.controller.BoardManager;
+import com.team.audiomixer.controller.BoardManagerWithServerMng;
 import com.team.audiomixer.model.Board;
 
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class MediaBoardActivity extends AppCompatActivity implements BoardManage
         listView = (ListView) findViewById(R.id.mediaBoardListView);
         listViewAdapter = new MediaBoardListViewAdapter();
         listView.setAdapter(listViewAdapter);
-        mBoardManager = new BoardManager();
+        //mBoardManager = new BoardManager();
+        mBoardManager = new BoardManagerWithServerMng();
         mBoardManager.setDBManagerListener(mBoardManager);
         mBoardManager.setBoardManagerRequestBoardListener(this);
 
