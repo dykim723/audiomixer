@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,14 +30,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.team.audiomixer.controller.DBManager;
 import com.team.audiomixer.controller.MembershipManager;
+import com.team.audiomixer.controller.ServerManager;
+import com.team.audiomixer.model.User;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -320,6 +324,12 @@ public class JoinActivity extends AppCompatActivity implements LoaderCallbacks<C
         int IS_PRIMARY = 1;
     }
 
+
+  /*  public interface ServerAccessService {
+        @POST("join")
+        Call<User> createUser(@Body User user);
+    }*/
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -338,10 +348,7 @@ public class JoinActivity extends AppCompatActivity implements LoaderCallbacks<C
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            // TODO: register the new account here.
             return membershipManager.createUser(mEmail, mPassword, mNickname);
-
         }
 
         @Override
