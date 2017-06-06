@@ -12,6 +12,7 @@ var login = require('./routes/login');
 var join = require('./routes/join');
 var posting = require('./routes/posting');
 var mix = require('./routes/mix');
+var board = require('./routes/board');
 var fs = require('fs');
 var http = require('http');
 /*
@@ -59,6 +60,7 @@ app.use('/join', join);
 app.use('/posting', posting);
 app.use('/mix', mix);
 app.use('/mix/', mix);
+app.use('/board', board);
 
 app.use('/static', express.static('public'));
 
@@ -76,11 +78,9 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-
 // error handler
 
-
 app.listen(5001, function () {
-  console.log('Example app listening on port 5000!');
+  console.log('Example app listening on port 5001!');
 });
 module.exports = app;

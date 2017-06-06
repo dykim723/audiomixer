@@ -2,6 +2,7 @@ package com.team.audiomixer.controller;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,9 +21,22 @@ import static java.lang.Boolean.TRUE;
  */
 
 public class DBManager {
+    private static JSONArray mResponseJSON;
+    private static DBManagerExcutePostListener mExcutePostListener;
+
+    public static JSONArray getResponseJSON() { return mResponseJSON; }
+
+    public interface DBManagerExcutePostListener {
+        void onExcutePost(boolean excuteResult);
+    }
+
+    public static void setDBManagerExcutePostListener(DBManagerExcutePostListener listener)
+    {
+        mExcutePostListener = listener;
+    }
 
     public enum ServerAccessKey {
-        USERS("users"), LOGIN("login"), JOIN("join"), POSTING("posting"), MIX("mix");
+        USERS("users"), LOGIN("login"), JOIN("join"), POSTING("posting"), MIX("mix"), BOARD("board");
 
         final private String value;
 
@@ -46,7 +60,6 @@ public class DBManager {
         HttpURLConnection connection = null;
         ByteArrayOutputStream baos = null;
 
-
         try {
             url = new URL(makeDBURL(key));
 
@@ -55,7 +68,6 @@ public class DBManager {
             connection.setRequestMethod("POST"); // hear you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
             connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
             connection.connect();
-
 
             //Send request
             DataOutputStream wr = new DataOutputStream(
@@ -81,21 +93,25 @@ public class DBManager {
                 String res = new String(byteData);
 
 
-                JSONObject responseJSON = new JSONObject(res);
+                JSONArray responseJSON = new JSONArray(res);
+                mResponseJSON = responseJSON;
 
-                Boolean result = (Boolean) responseJSON.get("status");
-                String description = (String) responseJSON.get("description");
+                //Boolean result = (Boolean) responseJSON.getJSONObject(0).get("status");
+                //String description = (String) responseJSON.getJSONObject(0).get("description");
 
                 Log.i("DBManager", "DATA response = " + res);
 
-                if(result) {
+                if(res.length() > 0) {
+                    mExcutePostListener.onExcutePost(true);
                     return true;
                 } else{
+                    mExcutePostListener.onExcutePost(false);
                     return false;
                 }
 
             } else {
                 //return is = connection.getErrorStream();
+                mExcutePostListener.onExcutePost(false);
                 return false;
             }
 
@@ -103,6 +119,7 @@ public class DBManager {
         } catch (Exception e) {
 
             e.printStackTrace();
+            mExcutePostListener.onExcutePost(false);
             return false;
 
         } finally {
