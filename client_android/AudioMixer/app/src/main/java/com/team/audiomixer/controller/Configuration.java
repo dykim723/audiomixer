@@ -5,6 +5,6 @@ package com.team.audiomixer.controller;
  */
 
 public class Configuration {
-    final static String DBURL = "http://192.168.219.5:5001/";
+    final static String SERVER_URL = "http://192.168.219.5:5001/";
 
 }

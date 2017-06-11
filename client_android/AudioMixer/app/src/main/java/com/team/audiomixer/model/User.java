@@ -8,6 +8,12 @@ public class User {
     private String email = "";
     private String password = "";
     private String nickname = "";
+    private String token = "";
+
+    public User()
+    {
+
+    }
 
     public User(String email, String password, String nickname) {
         this.email = email;
@@ -40,5 +46,13 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

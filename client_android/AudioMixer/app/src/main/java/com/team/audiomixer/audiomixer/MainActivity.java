@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.team.audiomixer.controller.Configuration;
+import com.team.audiomixer.controller.SessionManager;
 import com.team.audiomixer.model.User;
 
 import retrofit2.Retrofit;
@@ -22,6 +23,7 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SessionManager sessionManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        sessionManager = new SessionManager(this.getApplicationContext());
     }
 
     @Override
@@ -87,34 +91,37 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         Intent myIntent = null;
         int id = item.getItemId();
+        if(sessionManager.checkLogin()) {
+            if (sessionManager.isLoggedIn()) {
+                if (id == R.id.nav_camera) {
+                    // Handle the camera action
+                    myIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    myIntent.putExtra("key", "Login"); //Optional parameters
+                    MainActivity.this.startActivity(myIntent);
+                } else if (id == R.id.nav_gallery) {
+                    myIntent = new Intent(MainActivity.this, WritePostActivity.class);
+                    MainActivity.this.startActivity(myIntent);
+                } else if (id == R.id.content_mixing) {
+                    myIntent = new Intent(MainActivity.this, MixingActivity.class);
+                    MainActivity.this.startActivity(myIntent);
+                } else if (id == R.id.music_player) {
+                    myIntent = new Intent(MainActivity.this, StreamingActivity.class);
+                    MainActivity.this.startActivity(myIntent);
+                } else if (id == R.id.nav_share) {
+                    myIntent = new Intent(MainActivity.this, RecordActivity.class);
+                    MainActivity.this.startActivity(myIntent);
+                } else if (id == R.id.nav_send) {
+                    myIntent = new Intent(MainActivity.this, MediaBoardActivity.class);
+                    MainActivity.this.startActivity(myIntent);
+                } else if (id == R.id.nav_join) {
+                    myIntent = new Intent(MainActivity.this, JoinActivity.class);
+                    MainActivity.this.startActivity(myIntent);
+                }
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            myIntent = new Intent(MainActivity.this, LoginActivity.class);
-            myIntent.putExtra("key", "Login"); //Optional parameters
-            MainActivity.this.startActivity(myIntent);
-        } else if (id == R.id.nav_gallery) {
-            myIntent = new Intent(MainActivity.this, WritePostActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        } else if (id == R.id.content_mixing) {
-            myIntent = new Intent(MainActivity.this, MixingActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        } else if (id == R.id.music_player) {
-            myIntent = new Intent(MainActivity.this, StreamingActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        } else if (id == R.id.nav_share) {
-            myIntent = new Intent(MainActivity.this, RecordActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        } else if (id == R.id.nav_send) {
-            myIntent = new Intent(MainActivity.this, MediaBoardActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        } else if (id == R.id.nav_join) {
-            myIntent = new Intent(MainActivity.this, JoinActivity.class);
-            MainActivity.this.startActivity(myIntent);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

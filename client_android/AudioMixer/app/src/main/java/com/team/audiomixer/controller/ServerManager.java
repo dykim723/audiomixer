@@ -1,35 +1,32 @@
 package com.team.audiomixer.controller;
 
-import android.util.Log;
+import android.text.TextUtils;
 
 import com.team.audiomixer.model.User;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-import static java.lang.Boolean.TRUE;
-
 /**
  * Created by dykim on 2017-05-28.
  */
 
 public class ServerManager {
-    private Retrofit retrofit;
+    //private Retrofit retrofit;
     private ServerAccessService apiService;
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+    private static Retrofit.Builder builder =
+            new Retrofit.Builder()
+                    .baseUrl(Configuration.SERVER_URL)
+                    .addConverterFactory(GsonConverterFactory.create());
+
+    private static Retrofit retrofit = builder.build();
 
     private static ServerManager instance;
 
@@ -51,7 +48,7 @@ public class ServerManager {
     }
 
     private ServerManager(){
-        retrofit = new Retrofit.Builder().baseUrl(Configuration.DBURL).addConverterFactory(GsonConverterFactory.create()).build();
+        //retrofit = new Retrofit.Builder().baseUrl(Configuration.SERVER_URL).addConverterFactory(GsonConverterFactory.create()).build();
         apiService = retrofit.create(ServerAccessService.class);
     }
 
@@ -64,5 +61,37 @@ public class ServerManager {
             }
         }
         return instance;
+    }
+
+    public static <S> S createService(Class<S> serviceClass) {
+        return createService(serviceClass, null, null);
+    }
+
+    public static <S> S createService(
+            Class<S> serviceClass, String username, String password) {
+        if (!TextUtils.isEmpty(username)
+                && !TextUtils.isEmpty(password)) {
+            String authToken = Credentials.basic(username, password);
+            return createService(serviceClass, authToken);
+        }
+
+        return createService(serviceClass, null, null);
+    }
+
+    public static <S> S createService(
+            Class<S> serviceClass, final String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor =
+                    new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(serviceClass);
     }
 }

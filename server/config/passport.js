@@ -5,6 +5,17 @@ var LocalStrategy = require('passport-local').Strategy;
 var connection = require('./database');
 
 exports.setup = function () {
+
+    passport.serializeUser(function(user, done){
+        console.log(user);
+       done(null, user);
+    });
+
+    passport.deserializeUser(function(user, done){
+        console.log(user);
+       done(null, user);
+    });
+
     passport.use(new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password'

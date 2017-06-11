@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.team.audiomixer.controller.MembershipManager;
 import com.team.audiomixer.controller.ServerManager;
+import com.team.audiomixer.controller.SessionManager;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -421,7 +422,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return membershipManager.loginUser(mEmail, mPassword);
+            return membershipManager.loginUser(getApplicationContext(), mEmail, mPassword);
         }
 
         @Override
