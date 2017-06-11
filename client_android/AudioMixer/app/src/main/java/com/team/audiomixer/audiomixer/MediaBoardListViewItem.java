@@ -17,8 +17,9 @@ import java.io.IOException;
  */
 
 public class MediaBoardListViewItem {
+    private int mPosition;
     private ImageView profileImage;
-    private ImageButton playBtn;
+    private Button playBtn;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
     private TextView userID;
@@ -32,12 +33,41 @@ public class MediaBoardListViewItem {
     private String strContentInfo;
     private String mMediaPlayerSource;
     private boolean mIsPrepared;
+    private BoardListItemPlayStateListener mPlayStateListener;
+    private BoardListSurfaceViewListener mSurfaceViewListener;
 
+    public interface BoardListItemPlayStateListener {
+        enum eBOARD_PLAY_STATE {
+            eBOARD_PLAY_STATE_PREPARE,
+            eBOARD_PLAY_STATE_PLAY,
+            eBOARD_PLAY_STATE_PAUSE
+        }
+
+        void onBoardListItemPlayStateChanged(eBOARD_PLAY_STATE playState, int position);
+    }
+
+    public void setBoardListItemPlayStateListener(BoardListItemPlayStateListener listener)
+    {
+        mPlayStateListener = listener;
+    }
+
+    public interface BoardListSurfaceViewListener {
+        void onClickBoardListItemSurfaceView(boolean isVisible, int position);
+    }
+
+    public void setBoardListSurfaceViewListener(BoardListSurfaceViewListener listener)
+    {
+        mSurfaceViewListener = listener;
+    }
+
+    public void setPosition(int pos) { mPosition = pos; }
+    public int getPosition() { return mPosition; }
     public void setProfileImage(ImageView view) { profileImage = view; }
     public void setSurfaceHolder(SurfaceHolder holder) { surfaceHolder = holder; }
     public SurfaceHolder getSurfaceHolder() { return surfaceHolder; }
     public MediaPlayer getMediaPlayer() { return mediaPlayer; }
-    public void setPlayBtn(ImageButton btn) {
+    public Button getPlayBtn() { return playBtn; }
+    public void setPlayBtn(Button btn) {
         playBtn = btn;
         playBtn.setOnClickListener(mPlayBtnOnClickListener);
     }
@@ -48,10 +78,12 @@ public class MediaBoardListViewItem {
             if(mIsPrepared == false) {
                 try {
                     mediaPlayer.setDataSource(mMediaPlayerSource);
+                    mPlayStateListener.onBoardListItemPlayStateChanged(BoardListItemPlayStateListener.eBOARD_PLAY_STATE.eBOARD_PLAY_STATE_PREPARE, mPosition);
                     mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mp) {
                             mediaPlayer.start();
+                            mPlayStateListener.onBoardListItemPlayStateChanged(BoardListItemPlayStateListener.eBOARD_PLAY_STATE.eBOARD_PLAY_STATE_PLAY, mPosition);
                         }
                     });
                     mediaPlayer.prepareAsync();
@@ -65,11 +97,25 @@ public class MediaBoardListViewItem {
                 if(mediaPlayer.isPlaying())
                 {
                     mediaPlayer.pause();
+                    mPlayStateListener.onBoardListItemPlayStateChanged(BoardListItemPlayStateListener.eBOARD_PLAY_STATE.eBOARD_PLAY_STATE_PAUSE, mPosition);
                 }
                 else
                 {
                     mediaPlayer.start();
+                    mPlayStateListener.onBoardListItemPlayStateChanged(BoardListItemPlayStateListener.eBOARD_PLAY_STATE.eBOARD_PLAY_STATE_PLAY, mPosition);
                 }
+            }
+        }
+    };
+
+    SurfaceView.OnClickListener mSurfaceViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(playBtn.getVisibility() == View.VISIBLE) {
+                mSurfaceViewListener.onClickBoardListItemSurfaceView(true, mPosition);
+            }
+            else {
+                mSurfaceViewListener.onClickBoardListItemSurfaceView(false, mPosition);
             }
         }
     };
@@ -89,6 +135,7 @@ public class MediaBoardListViewItem {
 
     public void setSurfaceView(SurfaceView view) {
         surfaceView = view;
+        surfaceView.setOnClickListener(mSurfaceViewOnClickListener);
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(surfaceHolderListener);
     }

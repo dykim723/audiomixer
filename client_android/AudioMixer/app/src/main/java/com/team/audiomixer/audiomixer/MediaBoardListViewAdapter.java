@@ -52,7 +52,7 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         SurfaceView surfaceView = (SurfaceView) convertView.findViewById(R.id.playerView);
         ImageView profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
-        ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.playBtn);
+        Button imageButton = (Button) convertView.findViewById(R.id.playBtn);
         TextView userID = (TextView) convertView.findViewById(R.id.userID) ;
         TextView title = (TextView) convertView.findViewById(R.id.title) ;
         TextView content = (TextView) convertView.findViewById(R.id.content);
@@ -67,6 +67,7 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         title.setText(listViewItem.getTitleText());
         userID.setText(listViewItem.getUserIDText());
 
+        listViewItem.setPosition(pos);
         listViewItem.setContent(content);
         listViewItem.setTitle(title);
         listViewItem.setUserID(userID);
@@ -85,7 +86,7 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public MediaBoardListViewItem getItem(int position) {
         return mMediaListViewItems.get(position);
     }
 
