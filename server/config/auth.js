@@ -1,6 +1,7 @@
-/**
+/*
+/!**
  * Created by dykim on 2017-06-06.
- */
+ *!/
 'use strict';
 
 var jwt = require('jsonwebtoken');
@@ -34,4 +35,30 @@ function isAuthenticated() {
 
 
 exports.signToken = signToken;
-exports.isAuthenticated = isAuthenticated;
+exports.isAuthenticated = isAuthenticated;*/
+
+module.exports = {
+    'secret' :  '',
+
+    'federation' : {
+        'google': {
+            'client_id' : '',
+            'secret_id' : '',
+            'callback_url' : '/auth/login/google/callback'
+        },
+        'naver' : {
+            'client_id' : '',
+            'secret_id' : '',
+            'callback_url' : '/auth/login/naver/callback'
+        },
+        'facebook' : {
+            'client_id' : '',
+            'secret_id' : '',
+            'callback_url' : '/auth/login/facebook/callback'
+        },
+        'kakao' : {
+            'client_id' : '',
+            'callback_url' : '/auth/login/kakao/callback'
+        }
+    }
+};
