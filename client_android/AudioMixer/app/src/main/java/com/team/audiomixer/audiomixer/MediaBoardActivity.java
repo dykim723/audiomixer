@@ -99,7 +99,7 @@ public class MediaBoardActivity extends AppCompatActivity
             for(int i = 0; i < boardList.size(); i++) {
                 Board board = boardList.get(i);
 
-                listViewAdapter.addItem(board.getTitle(), board.getUserEmail(), board.getContent(), board.getDate(), board.getFilePath());
+                listViewAdapter.addItem(board.getBoardNo(), board.getTitle(), board.getUserEmail(), board.getContent(), board.getDate(), board.getFilePath());
                 MediaBoardListViewItem item = listViewAdapter.getItem(listViewAdapter.getCount() - 1);
                 item.setBoardListItemPlayStateListener(this);
                 item.setBoardListSurfaceViewListener(this);

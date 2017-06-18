@@ -63,6 +63,31 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnLike"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="좋아요"/>
+                <Button
+                    android:id="@+id/btnReply"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="댓글"/>
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="5dp"/>
+            </LinearLayout>
             <!-- Content text -->
             <TextView
                 android:id="@+id/content"
@@ -76,7 +101,7 @@
                 android:id="@+id/contentInfo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="5dp"/>
         </LinearLayout>

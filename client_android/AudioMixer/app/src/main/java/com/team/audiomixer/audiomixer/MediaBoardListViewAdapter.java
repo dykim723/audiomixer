@@ -26,14 +26,15 @@ import java.util.ArrayList;
 public class MediaBoardListViewAdapter extends BaseAdapter {
     private ArrayList<MediaBoardListViewItem> mMediaListViewItems = new ArrayList<MediaBoardListViewItem>() ;
 
-    public void addItem(String title, String userID, String content, String contentInfo, String mediaPlayerSource) {
+    public void addItem(int boardNo, String title, String userID, String content, String date, String mediaPlayerSource) {
         MediaBoardListViewItem item = new MediaBoardListViewItem();
 
         item.setTitleText(title);
         item.setUserIDText(userID);
         item.setContentText(content);
-        item.setContentInfoText(contentInfo);
+        item.setDateText(date);
         item.setmMediaPlayerSource(mediaPlayerSource);
+        item.setBoardNo(boardNo);
 
         mMediaListViewItems.add(item);
     }
@@ -53,10 +54,13 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         SurfaceView surfaceView = (SurfaceView) convertView.findViewById(R.id.playerView);
         ImageView profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
         Button imageButton = (Button) convertView.findViewById(R.id.playBtn);
+        Button likeButton = (Button) convertView.findViewById(R.id.btnLike);
+        Button replyButton = (Button) convertView.findViewById(R.id.btnReply);
         TextView userID = (TextView) convertView.findViewById(R.id.userID) ;
         TextView title = (TextView) convertView.findViewById(R.id.title) ;
         TextView content = (TextView) convertView.findViewById(R.id.content);
         TextView contentInfo = (TextView) convertView.findViewById(R.id.contentInfo);
+        TextView date = (TextView) convertView.findViewById(R.id.date);
         MediaPlayer mediaPlayer = new MediaPlayer();
 
         // Data Set(mMediaListViewItems)에서 position에 위치한 데이터 참조 획득
@@ -66,6 +70,7 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         content.setText(listViewItem.getContentText());
         title.setText(listViewItem.getTitleText());
         userID.setText(listViewItem.getUserIDText());
+        date.setText(listViewItem.getDateText());
 
         listViewItem.setPosition(pos);
         listViewItem.setContent(content);
@@ -76,6 +81,9 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         listViewItem.setSurfaceView(surfaceView);
         listViewItem.setMediaPlayer(mediaPlayer);
         listViewItem.setPlayBtn(imageButton);
+        listViewItem.setLikeBtn(likeButton);
+        listViewItem.setReplyBtn(replyButton);
+        listViewItem.setDate(date);
 
         return convertView;
     }

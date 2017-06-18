@@ -17,20 +17,27 @@ import java.io.IOException;
  */
 
 public class MediaBoardListViewItem {
+    private int mBoardNo;
     private int mPosition;
     private ImageView profileImage;
     private Button playBtn;
+    private Button mLikeBtn;
+    private Button mReplyBtn;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
     private TextView userID;
     private TextView title;
     private TextView content;
     private TextView contentInfo;
+    private TextView mDate;
     private MediaPlayer mediaPlayer;
     private String strUserID;
     private String strTitle;
     private String strContent;
     private String strContentInfo;
+    private String mStrDate;
+    private String mStrLike;
+    private String mStrReply;
     private String mMediaPlayerSource;
     private boolean mIsPrepared;
     private BoardListItemPlayStateListener mPlayStateListener;
@@ -60,6 +67,8 @@ public class MediaBoardListViewItem {
         mSurfaceViewListener = listener;
     }
 
+    public void setBoardNo(int number) { mBoardNo = number; }
+    public int getBoardNo() { return mBoardNo; }
     public void setPosition(int pos) { mPosition = pos; }
     public int getPosition() { return mPosition; }
     public void setProfileImage(ImageView view) { profileImage = view; }
@@ -71,6 +80,61 @@ public class MediaBoardListViewItem {
         playBtn = btn;
         playBtn.setOnClickListener(mPlayBtnOnClickListener);
     }
+    public Button getLikeBtn() { return mLikeBtn; }
+    public void setLikeBtn(Button btn) {
+        mLikeBtn = btn;
+        //mLikeBtn.setOnClickListener();
+    }
+    public Button getReplyBtn() { return mReplyBtn; }
+    public void setReplyBtn(Button btn) {
+        mReplyBtn = btn;
+        //mReplyBtn.setOnClickListener();
+    }
+
+    public void setUserID(TextView userID) {
+        this.title = userID;
+    }
+    public TextView getUserID() {
+        return this.userID ;
+    }
+    public void setTitle(TextView title) {
+        this.title = title;
+    }
+    public TextView getTitle() {
+        return this.title ;
+    }
+    public void setContent(TextView content) {
+        this.title = content;
+    }
+    public TextView getContent() {
+        return this.content ;
+    }
+    public void setContentInfo(TextView info) { this.contentInfo = info; }
+    public TextView getContentInfo() {
+        return this.contentInfo ;
+    }
+    public void setDate(TextView date) {
+        this.mDate = date;
+    }
+    public TextView getDate() {
+        return this.mDate ;
+    }
+    public void setmMediaPlayerSource(String source) { mMediaPlayerSource = source; }
+    public String getmMediaPlayerSource() { return mMediaPlayerSource; }
+    public void setUserIDText(String str) { strUserID = str; }
+    public void setTitleText(String str) { strTitle = str; }
+    public void setContentText(String str) { strContent = str; }
+    public void setContentInfoText(String str) { strContentInfo = str; }
+    public String getUserIDText() { return strUserID; }
+    public String getTitleText() { return  strTitle; }
+    public String getContentText() { return strContent; }
+    public String getContentInfoText() { return strContentInfo; }
+    public void setLikeText(String str) { mStrLike = str; }
+    public String getLikeText() { return mStrLike; }
+    public void setDateText(String str) { mStrDate = str; }
+    public String getDateText() { return mStrDate; }
+    public void setReplyText(String str) { mStrReply = str; }
+    public String getReplyText() { return mStrReply; }
 
     Button.OnClickListener mPlayBtnOnClickListener = new View.OnClickListener() {
         @Override
@@ -139,39 +203,6 @@ public class MediaBoardListViewItem {
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(surfaceHolderListener);
     }
-
-    public void setUserID(TextView userID) {
-        this.title = userID;
-    }
-    public TextView getUserID() {
-        return this.userID ;
-    }
-    public void setTitle(TextView title) {
-        this.title = title;
-    }
-    public TextView getTitle() {
-        return this.title ;
-    }
-    public void setContent(TextView content) {
-        this.title = content;
-    }
-    public TextView getContent() {
-        return this.content ;
-    }
-    public void setContentInfo(TextView info) { this.contentInfo = info; }
-    public TextView getContentInfo() {
-        return this.contentInfo ;
-    }
-    public void setmMediaPlayerSource(String source) { mMediaPlayerSource = source; }
-    public String getmMediaPlayerSource() { return mMediaPlayerSource; }
-    public void setUserIDText(String str) { strUserID = str; }
-    public void setTitleText(String str) { strTitle = str; }
-    public void setContentText(String str) { strContent = str; }
-    public void setContentInfoText(String str) { strContentInfo = str; }
-    public String getUserIDText() { return strUserID; }
-    public String getTitleText() { return  strTitle; }
-    public String getContentText() { return strContent; }
-    public String getContentInfoText() { return strContentInfo; }
 
     private SurfaceHolder.Callback surfaceHolderListener = new SurfaceHolder.Callback() {
 
