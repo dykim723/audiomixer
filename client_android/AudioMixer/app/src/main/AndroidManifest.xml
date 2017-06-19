@@ -31,7 +31,8 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".WritePostActivity" />
+        <activity android:name=".WritePostActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".MixingActivity"
             android:label="@string/title_activity_mixing"

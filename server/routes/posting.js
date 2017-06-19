@@ -5,11 +5,12 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var multer = require('multer')
 var fs = require('fs');
-var connection = require('../config/database');
+var connection = require('/home/ubuntu/work/audiomixer_branch/audiomixer/server/config/database');
+var dateReq = require('date-utils');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        var dirPath = './public/' + req.body.Email.substring(2, req.body.Email.length);
+        var dirPath = '/home/ubuntu/work/audiomixer_branch/audiomixer/server/public/' + req.body.Email.substring(2, req.body.Email.length);
 
         if(fs.existsSync(dirPath) == false)
         {
@@ -26,12 +27,13 @@ var storage = multer.diskStorage({
     filename: function (req, file, cb) {
         var email = req.body.Email.substring(2, req.body.Email.length);
         var fileType = req.body.FileType.substring(2, req.body.FileType.length);
-        var dirPath = './public/' + email + '/';
+        var dirPath = '/home/ubuntu/work/audiomixer_branch/audiomixer/server/public/' + email + '/';
         var fileName = file.originalname.substring(2, file.originalname.length);
         var fileNameBuff = file.originalname.substring(2, file.originalname.length);
         var fileNum = 1;
 
         console.log("File Count: " + req.files.length);
+        console.log('file type: ' + fileType);
 
         while(fs.existsSync(dirPath + fileNameBuff))
         {
@@ -43,7 +45,7 @@ var storage = multer.diskStorage({
 
         connection.query('INSERT INTO FileInfo SET ?', insertData, function(err, result) {
             if (err) {
-                console.log('insert query fail');
+                console.log('insert query fail 1');
                 return;
             }
             else {
@@ -88,7 +90,11 @@ router.post('/', upload.array('file', 5), function (req, res) {
     console.log('Content ' + content);
     console.log('Email ' + email);
 
-    var insertData = {BoardNo: 0, Title: title, Content: content, Email: email};
+    //var insertData = {BoardNo: 0, Title: title, Content: content, Email: email};
+    var strDate = new Date().toFormat("YYYY-MM-DD HH24:MI:SS");
+    //var strDate = new Date().toFormat("YYYY-MM-DD");
+    console.log('date: ' + strDate);
+    var insertData = {BoardNo: 0, Title: title, Content: content, Date: strDate, UserInfo_Email: email};
 
     connection.query('INSERT INTO Board SET ?', insertData, function(err, result) {
         if (err) {
