@@ -274,7 +274,7 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
 
                 case POST_SUCCESS:
                     boardNo = msg.arg1;
-                    Intent intent = new Intent(WritePostActivity.this, MixingActivity.class);
+                    Intent intent = new Intent(WritePostActivity.this, MediaBoardActivity.class);
                     intent.putExtra("BOARD_NO", boardNo);
                     startActivity(intent);
                     finish();

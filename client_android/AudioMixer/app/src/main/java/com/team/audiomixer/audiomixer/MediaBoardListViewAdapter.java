@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.team.audiomixer.controller.Configuration;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -33,7 +35,7 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         item.setUserIDText(userID);
         item.setContentText(content);
         item.setDateText(date);
-        item.setmMediaPlayerSource(mediaPlayerSource);
+        item.setmMediaPlayerSource(Configuration.DBURL + userID + "/" + mediaPlayerSource);
         item.setBoardNo(boardNo);
 
         mMediaListViewItems.add(item);
