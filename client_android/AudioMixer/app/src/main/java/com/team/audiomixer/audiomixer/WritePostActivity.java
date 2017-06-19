@@ -41,6 +41,7 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
     private Button mButtonAddImage;
     private Button mButtonAddMedia;
     private String mFilePath;
+    private String mFileType;
     private ArrayList<String> mListStringKey;
     private ArrayList<String> mListStringVal;
     private ArrayList<String> mListFileKey;
@@ -73,6 +74,7 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
         mListStringVal = new ArrayList<String>();
         mListInstrumentKey = new ArrayList<Integer>();
         mFilePath = "";
+        mFileType = "";
         mMediaListView = (ListView) findViewById(R.id.MediaListView);
         mMediaListVeiwAdapter = new MediaListViewAdapter();
         mProgressDialog = new ProgressDialog(this);
@@ -99,6 +101,7 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
     {
         if(mFilePath.length() > 0)
         {
+            mFileType = mFilePath.substring(mFilePath.lastIndexOf('.') + 1);
             mListFileKey.add(mFilePath.substring(mFilePath.lastIndexOf('/') + 1));
             mListFileVal.add(mFilePath);
             mMediaListVeiwAdapter.addItem(mFilePath.substring(mFilePath.lastIndexOf('/') + 1));
@@ -248,8 +251,10 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
                     mListStringVal.add(mEditTextContent.getText().toString());
                     mListStringKey.add("Email");
                     mListStringVal.add("TestEmail@gmail.com");
+                    mListStringKey.add("FileType");
+                    mListStringVal.add(mFileType);
 
-                    excuteFilePost("http://192.168.11.108:5001/posting");
+                    excuteFilePost("http://52.78.143.80:5000/posting");
                 }
             }.start();
         }
