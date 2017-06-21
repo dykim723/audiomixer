@@ -7,10 +7,13 @@ var multer = require('multer')
 var fs = require('fs');
 var connection = require('/home/ubuntu/work/audiomixer_branch/audiomixer/server/config/database');
 var dateReq = require('date-utils');
+var ffmpeg = require('fluent-ffmpeg');
+var gFileName;
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        var dirPath = '/home/ubuntu/work/audiomixer_branch/audiomixer/server/public/' + req.body.Email.substring(2, req.body.Email.length);
+        var email = req.body.Email.substring(2, req.body.Email.length);
+        var dirPath = '/home/ubuntu/work/audiomixer_branch/audiomixer/server/public/' + email;
 
         if(fs.existsSync(dirPath) == false)
         {
@@ -26,10 +29,13 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         var email = req.body.Email.substring(2, req.body.Email.length);
-        var fileType = req.body.FileType.substring(2, req.body.FileType.length);
         var dirPath = '/home/ubuntu/work/audiomixer_branch/audiomixer/server/public/' + email + '/';
+        var fileType = req.body.FileType.substring(2, req.body.FileType.length);
         var fileName = file.originalname.substring(2, file.originalname.length);
         var fileNameBuff = file.originalname.substring(2, file.originalname.length);
+        var thumbnailFileName = 'tn_audio.png';
+        var width = req.body.Width.substring(2, req.body.Width.length);
+        var height = req.body.Height.substring(2, req.body.Height.length);
         var fileNum = 1;
 
         console.log("File Count: " + req.files.length);
@@ -40,10 +46,19 @@ var storage = multer.diskStorage({
             fileNameBuff = fileNum + '_' + fileName;
             fileNum++;
         }
+        
+        gFileName = fileNameBuff;
+        
+        if(fileType === 'mp4')
+        {
+            thumbnailFileName = 'tn_' + fileNameBuff.replace(/\.[^/.]+$/, ".png");
+            console.log('thumbnailFileName ' + thumbnailFileName);
+        }
+        
+        var insertData = {FileNo: 0, FilePath: fileNameBuff, FileType: fileType, Thumbnail: thumbnailFileName, Width: width, Height: height, Board_BoardNo: 0, UserInfo_Email: email};
 
-        var insertData = {FileNo: 0, FilePath: fileNameBuff, FileType: fileType, Board_BoardNo: 0, UserInfo_Email: email};
-
-        connection.query('INSERT INTO FileInfo SET ?', insertData, function(err, result) {
+        connection.query('INSERT INTO FileInfo SET ?', insertData, function(err, result) 
+        {
             if (err) {
                 console.log('insert query fail 1');
                 return;
@@ -56,6 +71,19 @@ var storage = multer.diskStorage({
         cb(null, fileNameBuff);
     }
 });
+
+function makeThumbnail(dirPath, fileName, width, height) {
+    ffmpeg(dirPath + fileName)
+        .screenshots({
+            timestamps: ['65%'],
+            filename: 'tn_%b.png',
+            folder: dirPath,
+            size: height + 'x' + width
+        })
+        .on('end', function() {
+            console.log('make thumbnail finished !');
+        });
+}
 
 var upload = multer({ storage: storage });
 
@@ -80,20 +108,32 @@ router.post('/', upload.array('file', 5), function (req, res) {
     var title;
     var content;
     var email;
+    var dirPath;
+    var fileType;
+    var width;
+    var height;
     var boardNo = 0;
+    var strDate;
 
     title = req.body.Title.substring(2, req.body.Title.length);
     content = req.body.Content.substring(2, req.body.Content.length);
     email = req.body.Email.substring(2, req.body.Email.length);
-
+    dirPath = '/home/ubuntu/work/audiomixer_branch/audiomixer/server/public/' + email + '/';
+    fileType = req.body.FileType.substring(2, req.body.FileType.length);
+    width = req.body.Width.substring(2, req.body.Width.length);
+    height = req.body.Height.substring(2, req.body.Height.length);
+    strDate = new Date().toFormat("YYYY-MM-DD HH24:MI:SS");
+    
     console.log('Title ' + title);
     console.log('Content ' + content);
     console.log('Email ' + email);
-
-    //var insertData = {BoardNo: 0, Title: title, Content: content, Email: email};
-    var strDate = new Date().toFormat("YYYY-MM-DD HH24:MI:SS");
-    //var strDate = new Date().toFormat("YYYY-MM-DD");
     console.log('date: ' + strDate);
+
+    if(fileType === 'mp4')
+    {
+        makeThumbnail(dirPath, gFileName, width, height);
+    }
+    
     var insertData = {BoardNo: 0, Title: title, Content: content, Date: strDate, UserInfo_Email: email};
 
     connection.query('INSERT INTO Board SET ?', insertData, function(err, result) {

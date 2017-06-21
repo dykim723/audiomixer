@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.team.audiomixer.controller.Configuration;
+import com.team.audiomixer.model.Board;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,15 +29,19 @@ import java.util.ArrayList;
 public class MediaBoardListViewAdapter extends BaseAdapter {
     private ArrayList<MediaBoardListViewItem> mMediaListViewItems = new ArrayList<MediaBoardListViewItem>() ;
 
-    public void addItem(int boardNo, String title, String userID, String content, String date, String mediaPlayerSource) {
+    public void addItem(Board board) {
         MediaBoardListViewItem item = new MediaBoardListViewItem();
 
-        item.setTitleText(title);
-        item.setUserIDText(userID);
-        item.setContentText(content);
-        item.setDateText(date);
-        item.setmMediaPlayerSource(Configuration.DBURL + userID + "/" + mediaPlayerSource);
-        item.setBoardNo(boardNo);
+        item.setTitleText(board.getTitle());
+        item.setUserIDText(board.getUserEmail());
+        item.setContentText(board.getContent());
+        item.setDateText(board.getDate());
+        item.setmMediaPlayerSource(Configuration.DBURL + board.getUserEmail() + "/" + board.getFilePath());
+        item.setFileType(board.getFileType());
+        item.setThumbnailPath(Configuration.DBURL + board.getUserEmail() + "/" + board.getThumbnailPath());
+        item.setWidth(board.getWidth());
+        item.setHeight(board.getHeight());
+        item.setBoardNo(board.getBoardNo());
 
         mMediaListViewItems.add(item);
     }

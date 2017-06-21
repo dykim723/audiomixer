@@ -3,6 +3,7 @@ package com.team.audiomixer.audiomixer;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresPermission;
@@ -42,6 +43,8 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
     private Button mButtonAddMedia;
     private String mFilePath;
     private String mFileType;
+    private String mFileWidth;
+    private String mFileHeight;
     private ArrayList<String> mListStringKey;
     private ArrayList<String> mListStringVal;
     private ArrayList<String> mListFileKey;
@@ -75,6 +78,8 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
         mListInstrumentKey = new ArrayList<Integer>();
         mFilePath = "";
         mFileType = "";
+        mFileWidth = "320";
+        mFileHeight = "240";
         mMediaListView = (ListView) findViewById(R.id.MediaListView);
         mMediaListVeiwAdapter = new MediaListViewAdapter();
         mProgressDialog = new ProgressDialog(this);
@@ -107,6 +112,15 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
             mMediaListVeiwAdapter.addItem(mFilePath.substring(mFilePath.lastIndexOf('/') + 1));
             mMediaListVeiwAdapter.notifyDataSetChanged();
             mListInstrumentKey.add(-1);
+
+            if(mFileType.compareTo("mp4") == 0)
+            {
+                MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+                metaRetriever.setDataSource(mFilePath);
+                mFileHeight = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+                mFileWidth = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+                Log.d("WritePost", "Video W: " + mFileWidth + " H: " + mFileHeight);
+            }
         }
     }
 
@@ -253,6 +267,10 @@ implements MediaListViewAdapter.MediaListViewDeleteBtnClickListener
                     mListStringVal.add("TestEmail@gmail.com");
                     mListStringKey.add("FileType");
                     mListStringVal.add(mFileType);
+                    mListStringKey.add("Width");
+                    mListStringVal.add(mFileWidth);
+                    mListStringKey.add("Height");
+                    mListStringVal.add(mFileHeight);
 
                     excuteFilePost("http://52.78.143.80:5000/posting");
                 }

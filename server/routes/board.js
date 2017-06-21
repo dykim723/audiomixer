@@ -29,8 +29,7 @@ router.post('/', function (req, res)
 		}
 		else 
 		{
-			console.log('Select board success');
-			console.log('Select result ' + result);
+			console.log('Select board success'); 
 			res.json(result);
 		}
 	});

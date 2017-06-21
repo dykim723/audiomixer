@@ -75,6 +75,10 @@ public class BoardManager implements DBManager.DBManagerExcutePostListener {
                     board.setDate(json.getJSONObject(i).get("Date").toString());
                     board.setUserEmail(json.getJSONObject(i).get("UserInfo_Email").toString());
                     board.setFilePath(json.getJSONObject(i).get("FilePath").toString());
+                    board.setFileType(json.getJSONObject(i).get("FileType").toString());
+                    board.setThumbnailPath(json.getJSONObject(i).get("Thumbnail").toString());
+                    board.setWidth(Integer.parseInt(json.getJSONObject(i).get("Width").toString()));
+                    board.setHeight(Integer.parseInt(json.getJSONObject(i).get("Height").toString()));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
