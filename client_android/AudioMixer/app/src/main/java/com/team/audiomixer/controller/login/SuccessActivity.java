@@ -5,8 +5,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.kakao.auth.Session;
 import com.team.audiomixer.audiomixer.R;
 
 public class SuccessActivity extends AppCompatActivity {
@@ -26,6 +28,11 @@ public class SuccessActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        String accessToken = Session.getCurrentSession().getAccessToken();
+        String regreshToekn = Session.getCurrentSession().getRefreshToken();
+
+        Log.d("TOKEN!!!!", accessToken + " :: " + regreshToekn);
     }
 
 }
