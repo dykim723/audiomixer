@@ -29,4 +29,6 @@
 
     <!-- Strings related to join -->
     <string name="action_join_in">Join</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_success">SuccessActivity</string>
 </resources>

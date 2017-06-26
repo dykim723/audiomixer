@@ -2,12 +2,23 @@
 
 var express = require('express');
 var passport = require('passport');
-var auth = require('../config/auth');
+
 
 // 패스포트 세팅
 require('../config/passport').setup();
 
 var router = express.Router();
+
+router.get('/auth/login/kakao',
+    passport.authenticate('kakao')
+);
+
+router.get('/auth/login/kakao/callback',
+    passport.authenticate('kakao', {
+        successRedirect: '/',
+        failureRedirect: '/login'
+    })
+);
 
 // 로그인 라우팅 POST /login
 router.post('/', function(req, res, next) {

@@ -421,7 +421,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return membershipManager.loginUser(mEmail, mPassword);
+            //return membershipManager.loginUser(mEmail, mPassword);
+            return membershipManager.loginUserKakao(mEmail, mPassword);
         }
 
         @Override

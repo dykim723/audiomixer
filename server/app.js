@@ -5,6 +5,7 @@ var logger = require('morgan');
 var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 
 var index = require('./routes/index');
 var users = require('./routes/user');
@@ -13,6 +14,7 @@ var join = require('./routes/join');
 var posting = require('./routes/posting');
 var mix = require('./routes/mix');
 var board = require('./routes/board');
+var auth = require('./routes/auth');
 var fs = require('fs');
 var http = require('http');
 
@@ -56,6 +58,7 @@ app.use('/posting', posting);
 app.use('/mix', mix);
 app.use('/mix/', mix);
 app.use('/board', board);
+app.use('/auth', auth);
 
 app.use('/static', express.static('public'));
 
@@ -65,6 +68,23 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+/*로그인 성공시 사용자 정보를 Session에 저장한다*/
+passport.serializeUser(function (user, done) {
+  done(null, user)
+});
+
+/*인증 후, 페이지 접근시 마다 사용자 정보를 Session에서 읽어옴.*/
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
+/*로그인 유저 판단 로직*/
+var isAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+  res.redirect('/login');
+};
 
 // error handler
 

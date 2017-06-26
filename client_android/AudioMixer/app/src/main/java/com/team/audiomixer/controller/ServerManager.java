@@ -19,6 +19,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 import static java.lang.Boolean.TRUE;
@@ -39,6 +40,9 @@ public class ServerManager {
 
         @POST("login")
         Call<User> loginUser(@Body User user);
+
+        @GET("login/auth/login/kakao")
+        Call<String> loginUserKakao();
     }
 
     public ServerAccessService getAPIService(){
