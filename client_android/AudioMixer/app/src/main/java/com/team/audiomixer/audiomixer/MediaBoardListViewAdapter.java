@@ -32,6 +32,8 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
     public void addItem(Board board) {
         MediaBoardListViewItem item = new MediaBoardListViewItem();
 
+        item.makeBitmap();
+
         item.setTitleText(board.getTitle());
         item.setUserIDText(board.getUserEmail());
         item.setContentText(board.getContent());
@@ -60,7 +62,8 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         SurfaceView surfaceView = (SurfaceView) convertView.findViewById(R.id.playerView);
         ImageView profileImage = (ImageView) convertView.findViewById(R.id.profileImage);
-        Button imageButton = (Button) convertView.findViewById(R.id.playBtn);
+        ImageView thumbnailImage = (ImageView) convertView.findViewById(R.id.thumbnailView);
+        Button playButton = (Button) convertView.findViewById(R.id.playBtn);
         Button likeButton = (Button) convertView.findViewById(R.id.btnLike);
         Button replyButton = (Button) convertView.findViewById(R.id.btnReply);
         TextView userID = (TextView) convertView.findViewById(R.id.userID) ;
@@ -85,9 +88,10 @@ public class MediaBoardListViewAdapter extends BaseAdapter {
         listViewItem.setUserID(userID);
         listViewItem.setContentInfo(contentInfo);
         listViewItem.setProfileImage(profileImage);
+        listViewItem.setThumbnailImage(thumbnailImage);
         listViewItem.setSurfaceView(surfaceView);
         listViewItem.setMediaPlayer(mediaPlayer);
-        listViewItem.setPlayBtn(imageButton);
+        listViewItem.setPlayBtn(playButton);
         listViewItem.setLikeBtn(likeButton);
         listViewItem.setReplyBtn(replyButton);
         listViewItem.setDate(date);

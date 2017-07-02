@@ -1,10 +1,12 @@
 package com.team.audiomixer.audiomixer;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -12,6 +14,8 @@ import com.team.audiomixer.controller.BoardManager;
 import com.team.audiomixer.model.Board;
 
 import java.util.ArrayList;
+
+import static com.team.audiomixer.audiomixer.MediaBoardListViewItem.BoardListSurfaceViewListener.eBOARD_PLAYER_VIEW_EVENT.eBOARD_PLAYER_VIEW_EVENT_THUMBNAIL_UPDATE;
 
 public class MediaBoardActivity extends AppCompatActivity
     implements BoardManager.BoardManagerRequestBoardListener
@@ -28,6 +32,7 @@ public class MediaBoardActivity extends AppCompatActivity
     final int eGUI_HANDLER_CMD_PLAYER_PAUSE = 104;
     final int eGUI_HANDLER_CMD_PLAYER_VISIBLE = 105;
     final int eGUI_HANDLER_CMD_PLAYER_INVISIBLE = 106;
+    final int eGUI_HANDLER_CMD_THUMBNAIL_UPDATE = 107;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +51,7 @@ public class MediaBoardActivity extends AppCompatActivity
 
     final Handler mGUIHandler = new Handler(){
         public void handleMessage(Message msg){
-            int position = 0;
+            int position = position = msg.arg1;
             MediaBoardListViewItem item;
 
             switch (msg.what)
@@ -56,33 +61,40 @@ public class MediaBoardActivity extends AppCompatActivity
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_PREPARE:
-                    position = msg.arg1;
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setText("Loading");
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_PLAY:
-                    position = msg.arg1;
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setText("||");
+
+                    if(item.getThumbnailImage().getVisibility() == View.VISIBLE) {
+                        item.getThumbnailImage().setVisibility(View.INVISIBLE);
+                    }
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_PAUSE:
-                    position = msg.arg1;
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setText(">");
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_VISIBLE:
-                    position = msg.arg1;
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setVisibility(View.VISIBLE);
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_INVISIBLE:
-                    position = msg.arg1;
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setVisibility(View.INVISIBLE);
+                    break;
+
+                case eGUI_HANDLER_CMD_THUMBNAIL_UPDATE:
+                    item = listViewAdapter.getItem(position);
+                    item.getThumbnailImage().setImageBitmap(item.getBitmap());
+                    listViewAdapter.notifyDataSetChanged();
+                    item.getThumbnailImage().invalidate();
+                    Log.d("MediaBoard", "set eGUI_HANDLER_CMD_THUMBNAIL_UPDATE ");
                     break;
 
                 default:
@@ -93,12 +105,15 @@ public class MediaBoardActivity extends AppCompatActivity
 
     @Override
     public void onRequestBoard(boolean requestResult) {
+        int position = 0;
+
         if(true == requestResult) {
             ArrayList<Board> boardList = mBoardManager.getBoardList();
 
             for(int i = 0; i < boardList.size(); i++) {
                 Board board = boardList.get(i);
 
+                position = listViewAdapter.getCount();
                 listViewAdapter.addItem(board);
                 MediaBoardListViewItem item = listViewAdapter.getItem(listViewAdapter.getCount() - 1);
                 item.setBoardListItemPlayStateListener(this);
@@ -107,6 +122,7 @@ public class MediaBoardActivity extends AppCompatActivity
 
             Message handlerMsg = mGUIHandler.obtainMessage();
             handlerMsg.what = eGUI_HANDLER_CMD_LIST_UPDATE;
+            handlerMsg.arg1 = position;
             mGUIHandler.sendMessage(handlerMsg);
         }
     }
@@ -137,15 +153,25 @@ public class MediaBoardActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClickBoardListItemSurfaceView(boolean isVisible, int position) {
+    public void onClickBoardListItemSurfaceView(eBOARD_PLAYER_VIEW_EVENT event, int position) {
         Message handlerMsg = mGUIHandler.obtainMessage();
         handlerMsg.arg1 = position;
 
-        if(true == isVisible) {
-            handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_INVISIBLE;
-        }
-        else {
-            handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_VISIBLE;
+        switch (event) {
+            case eBOARD_PLAYER_VIEW_EVENT_PLAYER_INVISIVLE:
+                handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_INVISIBLE;
+                break;
+
+            case eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE:
+                handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_VISIBLE;
+                break;
+
+            case eBOARD_PLAYER_VIEW_EVENT_THUMBNAIL_UPDATE:
+                handlerMsg.what = eGUI_HANDLER_CMD_THUMBNAIL_UPDATE;
+                break;
+
+            default:
+                break;
         }
 
         mGUIHandler.sendMessage(handlerMsg);
