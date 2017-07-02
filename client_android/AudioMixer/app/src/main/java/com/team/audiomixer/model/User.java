@@ -9,6 +9,25 @@ public class User {
     private String password = "";
     private String nickname = "";
 
+    private String accessToken = "";
+    private String refreshToken = "";
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;

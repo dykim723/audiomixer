@@ -10,8 +10,15 @@ import android.view.View;
 
 import com.kakao.auth.Session;
 import com.team.audiomixer.audiomixer.R;
+import com.team.audiomixer.controller.ServerManager;
+import com.team.audiomixer.model.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SuccessActivity extends AppCompatActivity {
+    ServerManager serverManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +26,8 @@ public class SuccessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_success);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        serverManager = ServerManager.getInstance();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -30,9 +39,26 @@ public class SuccessActivity extends AppCompatActivity {
         });
 
         String accessToken = Session.getCurrentSession().getAccessToken();
-        String regreshToekn = Session.getCurrentSession().getRefreshToken();
+        String refreshToken = Session.getCurrentSession().getRefreshToken();
 
-        Log.d("TOKEN!!!!", accessToken + " :: " + regreshToekn);
+        Log.d("TOKEN!!!!", accessToken + " :: " + refreshToken);
+
+        User user = new User("dy", "dy", "dy");
+        user.setAccessToken(accessToken);
+        user.setRefreshToken(refreshToken);
+        Call<User> loginInfo = serverManager.getAPIService().loginUserKakao(user);
+
+        loginInfo.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.d("SuccessActivity", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
     }
 
 }

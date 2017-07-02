@@ -2,6 +2,7 @@
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var KakaoLocalStrategy = require('passport-local').Strategy;
 var KakaoStrategy = require('passport-kakao').Strategy;
 var connection = require('./database');
 var config = require('./config');
@@ -41,11 +42,26 @@ function loginByThirdparty(info, done) {
 }
 
 exports.setup = function () {
-    passport.use(new LocalStrategy({
+    /*로그인 성공시 사용자 정보를 Session에 저장한다*/
+    passport.serializeUser(function (user, done) {
+        console.log('serializeUser');
+        console.log(user);
+        done(null, user)
+    });
+
+    /*인증 후, 페이지 접근시 마다 사용자 정보를 Session에서 읽어옴.*/
+    passport.deserializeUser(function (user, done) {
+        console.log('deserializeUser');
+        console.log(user);
+        done(null, user);
+    });
+
+    passport.use('local', new LocalStrategy({
             usernameField: 'email',
-            passwordField: 'password'
-        },
-        function(email, password, done) {
+            passwordField: 'password',
+            session: true,
+            passReqToCallback: false
+        }, function(email, password, done) {
             // 인증 정보 체크 로직
 
             console.log(email, password);
@@ -66,12 +82,12 @@ exports.setup = function () {
                     return done(null, false, { message: 'Fail to login.' });
                 }
 
-                connection.release();
+
 
                 // Don't use the connection here, it has been returned to the pool.
             });
 
-
+        //connection.release();
         }
     ));
 
@@ -91,6 +107,22 @@ exports.setup = function () {
                 'auth_name': _profile.properties.nickname,
                 'auth_email': _profile.id
             }, done);
+        }
+    ));
+
+
+    passport.use('kakaoLocal', new KakaoLocalStrategy({
+            usernameField: 'email',
+            passwordField: 'password',
+            passReqToCallback: true
+        },
+        function(req, email, password, done) {
+            // 인증 정보 체크 로직
+
+            console.log(req.body, email, password);
+
+            return done(null, {email:email, password:password, accessToken:req.body.accessToken, refreshToken:req.body.refreshToken});
+
         }
     ));
 };

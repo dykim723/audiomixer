@@ -49,8 +49,7 @@ public class MembershipManager {
     {
         User tUser = new User(email, password);
 
-        Call<String> code = serverManager.getAPIService().loginUserKakao();
-        Log.d("!!!!!!!!!!", "ddddddddddddddddddddddddd");
+
 
 
         return true;
@@ -60,6 +59,7 @@ public class MembershipManager {
 
         User tUser = new User(email, password);
 
+        Log.d("JoinActivity", "!!!!!!!!!!!!!!!!!!!!!!!!" + email + " " + password);
         Call<User> user = serverManager.getAPIService().loginUser(tUser);
 
         user.enqueue(new Callback<User>() {

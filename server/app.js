@@ -49,6 +49,8 @@ app.use(function(req, res, next) {
   // Pass to next layer of middleware
   next();
 });
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
@@ -69,15 +71,7 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-/*로그인 성공시 사용자 정보를 Session에 저장한다*/
-passport.serializeUser(function (user, done) {
-  done(null, user)
-});
 
-/*인증 후, 페이지 접근시 마다 사용자 정보를 Session에서 읽어옴.*/
-passport.deserializeUser(function (user, done) {
-  done(null, user);
-});
 
 /*로그인 유저 판단 로직*/
 var isAuthenticated = function (req, res, next) {
