@@ -45,10 +45,21 @@ public class MembershipManager {
         return true;
     }
 
+    public boolean loginUserKakao(String email, String password)
+    {
+        User tUser = new User(email, password);
+
+
+
+
+        return true;
+    }
+
     public boolean loginUser(String email, String password) {
 
         User tUser = new User(email, password);
 
+        Log.d("JoinActivity", "!!!!!!!!!!!!!!!!!!!!!!!!" + email + " " + password);
         Call<User> user = serverManager.getAPIService().loginUser(tUser);
 
         user.enqueue(new Callback<User>() {

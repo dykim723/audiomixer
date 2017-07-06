@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.team.audiomixer.audiomixer.MixingActivity">
+    tools:context=".SuccessActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_mixing" />
+    <include layout="@layout/content_success" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -30,29 +30,11 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
-
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="510dp"
-        android:layout_gravity="bottom">
-
-        <Button
-            android:text="Start Mixing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnStartMixing" />
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2" />
-
-        <ProgressBar
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Login Success"
+        android:textSize="30dp"/>
+    [출처] [Android] AndroidStudio 카카오톡 로그인 연동하기(4) - 로그인 연동 (마지막)|작성자 Printf
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
-/**
+/*
+/!**
  * Created by dykim on 2017-06-06.
- */
+ *!/
 'use strict';
 
 var jwt = require('jsonwebtoken');
@@ -34,4 +35,21 @@ function isAuthenticated() {
 
 
 exports.signToken = signToken;
-exports.isAuthenticated = isAuthenticated;
+exports.isAuthenticated = isAuthenticated;*/
+
+
+'use strict';
+
+var express = require('express');
+var passport = require('passport');
+
+// 패스포트 세팅
+require('../config/passport').setup();
+
+var router = express.Router();
+
+/*router.get('/login/kakao/callback', function(){
+    console.log('dddd');
+});*/
+
+module.exports = router;

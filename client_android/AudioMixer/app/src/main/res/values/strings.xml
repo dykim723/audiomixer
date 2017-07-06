@@ -10,7 +10,6 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_nickname">Nickname</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -29,4 +28,6 @@
 
     <!-- Strings related to join -->
     <string name="action_join_in">Join</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_success">SuccessActivity</string>
 </resources>

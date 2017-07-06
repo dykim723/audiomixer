@@ -22,6 +22,10 @@
             android:id="@+id/nav_join"
             android:icon="@drawable/ic_menu_manage"
             android:title="Join" />
+        <item
+            android:id="@+id/login_kakao"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Login Kakao" />
     </group>
 
     <item android:title="Communicate">

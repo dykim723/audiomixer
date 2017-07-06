@@ -5,6 +5,7 @@ var logger = require('morgan');
 var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 
 var index = require('./routes/index');
 var users = require('./routes/user');
@@ -13,6 +14,7 @@ var join = require('./routes/join');
 var posting = require('./routes/posting');
 var mix = require('./routes/mix');
 var board = require('./routes/board');
+var auth = require('./routes/auth');
 var fs = require('fs');
 var http = require('http');
 
@@ -47,6 +49,8 @@ app.use(function(req, res, next) {
   // Pass to next layer of middleware
   next();
 });
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
@@ -56,6 +60,7 @@ app.use('/posting', posting);
 app.use('/mix', mix);
 app.use('/mix/', mix);
 app.use('/board', board);
+app.use('/auth', auth);
 
 app.use('/static', express.static('public'));
 
@@ -65,6 +70,15 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
+
+/*로그인 유저 판단 로직*/
+var isAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+  res.redirect('/login');
+};
 
 // error handler
 

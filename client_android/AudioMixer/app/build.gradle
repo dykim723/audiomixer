@@ -31,5 +31,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: '1.1.7'
     testCompile 'junit:junit:4.12'
 }
