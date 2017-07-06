@@ -1,4 +1,4 @@
-package com.team.audiomixer.controller.login;
+package com.team.audiomixer.audiomixer;
 
 /**
  * Created by dykim on 2017-06-25.
@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.kakao.auth.KakaoSDK;
+import com.team.audiomixer.controller.KakaoSDKAdapter;
 
 public class GlobalApplication extends Application {
     private static volatile GlobalApplication obj = null;

@@ -2,7 +2,6 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardView"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -34,7 +33,6 @@
                     android:layout_weight="1"
                     android:text="User ID"/>
                 <TextView
-                    android:id="@+id/textViewDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -72,19 +70,16 @@
             android:paddingBottom="2dp"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/textViewLikeCount"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Like 0"/>
             <TextView
-                android:id="@+id/textViewReplyCount"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Reply 0"/>
             <TextView
-                android:id="@+id/textViewMusicCount"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

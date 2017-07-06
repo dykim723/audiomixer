@@ -1,4 +1,4 @@
-package com.team.audiomixer.controller.login;
+package com.team.audiomixer.audiomixer;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

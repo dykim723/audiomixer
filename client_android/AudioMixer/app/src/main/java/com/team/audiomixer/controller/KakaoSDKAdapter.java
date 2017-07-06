@@ -1,4 +1,4 @@
-package com.team.audiomixer.controller.login;
+package com.team.audiomixer.controller;
 
 /**
  * Created by dykim on 2017-06-25.
@@ -12,6 +12,7 @@ import com.kakao.auth.AuthType;
 import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
+import com.team.audiomixer.audiomixer.GlobalApplication;
 
 public class KakaoSDKAdapter extends KakaoAdapter {
 

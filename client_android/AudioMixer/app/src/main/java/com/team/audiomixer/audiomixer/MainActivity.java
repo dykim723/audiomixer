@@ -14,12 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.team.audiomixer.controller.Configuration;
-import com.team.audiomixer.controller.login.Main2Activity;
-import com.team.audiomixer.model.User;
-
-import retrofit2.Retrofit;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -111,9 +105,6 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.startActivity(myIntent);
         } else if (id == R.id.nav_join) {
             myIntent = new Intent(MainActivity.this, JoinActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        } else if (id == R.id.login_kakao) {
-            myIntent = new Intent(MainActivity.this, Main2Activity.class);
             MainActivity.this.startActivity(myIntent);
         }
 
