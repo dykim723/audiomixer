@@ -145,8 +145,7 @@ public class MediaBoardListViewItem {
 
     public interface BoardListSurfaceViewListener {
         enum eBOARD_PLAYER_VIEW_EVENT {
-            eBOARD_PLAYER_VIEW_EVENT_PLAYER_INVISIVLE,
-            eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE,
+            eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE_CHANGE,
             eBOARD_PLAYER_VIEW_EVENT_THUMBNAIL_UPDATE
         }
 
@@ -198,12 +197,7 @@ public class MediaBoardListViewItem {
     SurfaceView.OnClickListener mSurfaceViewOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(playBtn.getVisibility() == View.VISIBLE) {
-                mSurfaceViewListener.onClickBoardListItemSurfaceView(BoardListSurfaceViewListener.eBOARD_PLAYER_VIEW_EVENT.eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE, mPosition);
-            }
-            else {
-                mSurfaceViewListener.onClickBoardListItemSurfaceView(BoardListSurfaceViewListener.eBOARD_PLAYER_VIEW_EVENT.eBOARD_PLAYER_VIEW_EVENT_PLAYER_INVISIVLE, mPosition);
-            }
+            mSurfaceViewListener.onClickBoardListItemSurfaceView(BoardListSurfaceViewListener.eBOARD_PLAYER_VIEW_EVENT.eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE_CHANGE, mPosition);
         }
     };
 
@@ -214,8 +208,8 @@ public class MediaBoardListViewItem {
 
     public void setSurfaceView(SurfaceView view) {
         surfaceView = view;
-        surfaceView.setZOrderOnTop(true);
-        surfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        //surfaceView.setZOrderOnTop(true);
+        //surfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         surfaceView.setOnClickListener(mSurfaceViewOnClickListener);
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(surfaceHolderListener);

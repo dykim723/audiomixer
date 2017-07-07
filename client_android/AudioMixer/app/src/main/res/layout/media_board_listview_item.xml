@@ -34,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6">
+        <!-- Player menus -->
         <Button
             android:id="@+id/playBtn"
             android:layout_width="100dp"
@@ -41,13 +42,14 @@
             android:text=">"
             android:layout_centerInParent="true"
             android:visibility="visible"/>
+        <!-- Thumbnail image -->
         <ImageView
             android:id="@+id/thumbnailView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"
             android:src="@drawable/ic_menu_gallery"/>
-        <!-- Contents Image -->
+        <!-- Player view -->
         <SurfaceView
             android:id="@+id/playerView"
             android:layout_width="match_parent"

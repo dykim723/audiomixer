@@ -1,7 +1,5 @@
 package com.team.audiomixer.audiomixer;
 
-import android.app.Application;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -30,9 +28,8 @@ public class MediaBoardActivity extends AppCompatActivity
     final int eGUI_HANDLER_CMD_PLAYER_PREPARE = 102;
     final int eGUI_HANDLER_CMD_PLAYER_PLAY = 103;
     final int eGUI_HANDLER_CMD_PLAYER_PAUSE = 104;
-    final int eGUI_HANDLER_CMD_PLAYER_VISIBLE = 105;
-    final int eGUI_HANDLER_CMD_PLAYER_INVISIBLE = 106;
-    final int eGUI_HANDLER_CMD_THUMBNAIL_UPDATE = 107;
+    final int eGUI_HANDLER_CMD_PLAYER_VISIBLE_CHANGE = 105;
+    final int eGUI_HANDLER_CMD_THUMBNAIL_UPDATE = 106;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +51,7 @@ public class MediaBoardActivity extends AppCompatActivity
             int position = position = msg.arg1;
             MediaBoardListViewItem item;
 
+            Log.d("MediaBoard", "set eGUI_HANDLER " + msg.what);
             switch (msg.what)
             {
                 case eGUI_HANDLER_CMD_LIST_UPDATE:
@@ -72,6 +70,10 @@ public class MediaBoardActivity extends AppCompatActivity
                     if(item.getThumbnailImage().getVisibility() == View.VISIBLE) {
                         item.getThumbnailImage().setVisibility(View.INVISIBLE);
                     }
+
+                    if(item.getSurfaceView().getVisibility() == View.INVISIBLE) {
+                        item.getSurfaceView().setVisibility(View.VISIBLE);
+                    }
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_PAUSE:
@@ -79,14 +81,15 @@ public class MediaBoardActivity extends AppCompatActivity
                     item.getPlayBtn().setText(">");
                     break;
 
-                case eGUI_HANDLER_CMD_PLAYER_VISIBLE:
+                case eGUI_HANDLER_CMD_PLAYER_VISIBLE_CHANGE:
                     item = listViewAdapter.getItem(position);
-                    item.getPlayBtn().setVisibility(View.VISIBLE);
-                    break;
 
-                case eGUI_HANDLER_CMD_PLAYER_INVISIBLE:
-                    item = listViewAdapter.getItem(position);
-                    item.getPlayBtn().setVisibility(View.INVISIBLE);
+                    if(item.getPlayBtn().getVisibility() == View.INVISIBLE) {
+                        item.getPlayBtn().setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        item.getPlayBtn().setVisibility(View.INVISIBLE);
+                    }
                     break;
 
                 case eGUI_HANDLER_CMD_THUMBNAIL_UPDATE:
@@ -94,7 +97,6 @@ public class MediaBoardActivity extends AppCompatActivity
                     item.getThumbnailImage().setImageBitmap(item.getBitmap());
                     listViewAdapter.notifyDataSetChanged();
                     item.getThumbnailImage().invalidate();
-                    Log.d("MediaBoard", "set eGUI_HANDLER_CMD_THUMBNAIL_UPDATE ");
                     break;
 
                 default:
@@ -158,12 +160,8 @@ public class MediaBoardActivity extends AppCompatActivity
         handlerMsg.arg1 = position;
 
         switch (event) {
-            case eBOARD_PLAYER_VIEW_EVENT_PLAYER_INVISIVLE:
-                handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_INVISIBLE;
-                break;
-
-            case eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE:
-                handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_VISIBLE;
+            case eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE_CHANGE:
+                handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_VISIBLE_CHANGE;
                 break;
 
             case eBOARD_PLAYER_VIEW_EVENT_THUMBNAIL_UPDATE:
