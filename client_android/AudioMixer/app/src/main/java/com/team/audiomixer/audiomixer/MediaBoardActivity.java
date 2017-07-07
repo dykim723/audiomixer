@@ -28,8 +28,9 @@ public class MediaBoardActivity extends AppCompatActivity
     final int eGUI_HANDLER_CMD_PLAYER_PREPARE = 102;
     final int eGUI_HANDLER_CMD_PLAYER_PLAY = 103;
     final int eGUI_HANDLER_CMD_PLAYER_PAUSE = 104;
-    final int eGUI_HANDLER_CMD_PLAYER_VISIBLE_CHANGE = 105;
-    final int eGUI_HANDLER_CMD_THUMBNAIL_UPDATE = 106;
+    final int eGUI_HANDLER_CMD_PLAYER_COMPLETE = 105;
+    final int eGUI_HANDLER_CMD_PLAYER_VISIBLE_CHANGE = 106;
+    final int eGUI_HANDLER_CMD_THUMBNAIL_UPDATE = 107;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +62,13 @@ public class MediaBoardActivity extends AppCompatActivity
                 case eGUI_HANDLER_CMD_PLAYER_PREPARE:
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setText("Loading");
+                    item.getPlayBtn().setClickable(false);
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_PLAY:
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setText("||");
+                    item.getPlayBtn().setClickable(true);
 
                     if(item.getThumbnailImage().getVisibility() == View.VISIBLE) {
                         item.getThumbnailImage().setVisibility(View.INVISIBLE);
@@ -77,6 +80,11 @@ public class MediaBoardActivity extends AppCompatActivity
                     break;
 
                 case eGUI_HANDLER_CMD_PLAYER_PAUSE:
+                    item = listViewAdapter.getItem(position);
+                    item.getPlayBtn().setText(">");
+                    break;
+
+                case eGUI_HANDLER_CMD_PLAYER_COMPLETE:
                     item = listViewAdapter.getItem(position);
                     item.getPlayBtn().setText(">");
                     break;
@@ -145,6 +153,10 @@ public class MediaBoardActivity extends AppCompatActivity
 
             case eBOARD_PLAY_STATE_PAUSE:
                 handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_PAUSE;
+                break;
+
+            case eBOARD_PLAY_STATE_COMPLETE:
+                handlerMsg.what = eGUI_HANDLER_CMD_PLAYER_COMPLETE;
                 break;
 
             default:

@@ -124,7 +124,6 @@ public class MediaBoardListViewItem {
     public void setThumbnailImage(ImageView mThumbnailImage) {
         if(this.mThumbnailImage == null) {
             this.mThumbnailImage = mThumbnailImage;
-            Log.d("MediaBoard", "set Tumbnail Image ");
         }
     }
 
@@ -132,7 +131,8 @@ public class MediaBoardListViewItem {
         enum eBOARD_PLAY_STATE {
             eBOARD_PLAY_STATE_PREPARE,
             eBOARD_PLAY_STATE_PLAY,
-            eBOARD_PLAY_STATE_PAUSE
+            eBOARD_PLAY_STATE_PAUSE,
+            eBOARD_PLAY_STATE_COMPLETE,
         }
 
         void onBoardListItemPlayStateChanged(eBOARD_PLAY_STATE playState, int position);
@@ -194,17 +194,19 @@ public class MediaBoardListViewItem {
         }
     };
 
-    SurfaceView.OnClickListener mSurfaceViewOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mSurfaceViewListener.onClickBoardListItemSurfaceView(BoardListSurfaceViewListener.eBOARD_PLAYER_VIEW_EVENT.eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE_CHANGE, mPosition);
-        }
-    };
-
     public void setMediaPlayer(MediaPlayer mp) {
         mediaPlayer = mp;
         mIsPrepared = false;
+
+        mediaPlayer.setOnCompletionListener(mOnCompletionListener);
     }
+
+    MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            mPlayStateListener.onBoardListItemPlayStateChanged(BoardListItemPlayStateListener.eBOARD_PLAY_STATE.eBOARD_PLAY_STATE_COMPLETE, mPosition);
+        }
+    };
 
     public void setSurfaceView(SurfaceView view) {
         surfaceView = view;
@@ -245,6 +247,13 @@ public class MediaBoardListViewItem {
             }
         }.start();
     }
+
+    SurfaceView.OnClickListener mSurfaceViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mSurfaceViewListener.onClickBoardListItemSurfaceView(BoardListSurfaceViewListener.eBOARD_PLAYER_VIEW_EVENT.eBOARD_PLAYER_VIEW_EVENT_PLAYER_VISIVLE_CHANGE, mPosition);
+        }
+    };
 
     private SurfaceHolder.Callback surfaceHolderListener = new SurfaceHolder.Callback() {
 
